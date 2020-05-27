@@ -8,12 +8,12 @@
 
 1. Em um local de sua preferência faça o clone do repositório: 
 ``` bash
-git clone https://github.com/robsantossilva/teste_watson.git
+git clone https://github.com/robsantossilva/watson-text-to-speech-example.git
 ```
 
 2. Existem dois arquivos que são importantes para a inicialização dos containers, e se faz necessário dar permissão a eles:
 ``` bash
-cd teste_watson
+cd watson-text-to-speech-example
 sudo chmod 777 backend/.docker/entrypoint.sh
 sudo chmod 777 frontend/.docker/entrypoint.sh
 ```
