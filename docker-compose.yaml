@@ -1,0 +1,54 @@
+version: '3'
+
+services: 
+
+  mysql: 
+    build: ./.docker/mysql
+    container_name: mysql
+    #command: --default-authentication-plugin=mysql_native_password
+    ports:
+      - "3306:3306"
+    volumes:
+      - ./.docker/mysql/data:/var/lib/mysql
+      - ./.docker/mysql/sql:/docker-entrypoint-initdb.d
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_DATABASE=teste_watson
+    networks:
+      - net_watson
+
+  backend:
+    build: ./backend
+    entrypoint: ./.docker/entrypoint.sh
+    container_name: backend
+    environment:
+      - CHOKIDAR_USEPOLLING=true
+    ports:
+      - 3001:3001
+    volumes:
+      - ./backend:/home/node/app
+    networks:
+      - net_watson
+    depends_on:
+      - mysql
+
+  frontend:
+    build: ./frontend
+    entrypoint: ./.docker/entrypoint.sh
+    container_name: frontend
+    tty: true
+    environment:
+      - CHOKIDAR_USEPOLLING=true
+    ports:
+      - 3000:3000
+    volumes:
+      - ./frontend:/home/node/app
+    networks:
+      - net_watson
+    depends_on: 
+      - mysql
+      - backend
+
+networks:
+  net_watson:
+    driver: bridge
